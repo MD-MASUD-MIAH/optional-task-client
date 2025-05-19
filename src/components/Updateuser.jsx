@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
+import { FaUser } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
-import { FaUser } from "react-icons/fa"; 
-import {  useLoaderData, useNavigate } from 'react-router';
-import Swal from 'sweetalert2';
+import { useLoaderData, useNavigate } from "react-router";
+import Swal from "sweetalert2";
 
 const Updateuser = () => {
   const data = useLoaderData();
-  const {_id} = data
-  const [gender, setGender] = useState('');
-  const [status, setStatus] = useState('');
- const  navigate  = useNavigate()
+  const { _id } = data;
+  const [gender, setGender] = useState("");
+  const [status, setStatus] = useState("");
+  const navigate = useNavigate();
   useEffect(() => {
     if (data) {
-      setGender(data.gender?.trim() || '');
-      setStatus(data.status?.trim() || '');
+      setGender(data.gender?.trim() || "");
+      setStatus(data.status?.trim() || "");
     }
   }, [data]);
 
@@ -28,42 +28,32 @@ const Updateuser = () => {
     //   status
     // };
 
-    const user = new FormData(form)  
+    const user = new FormData(form);
 
-    const update = Object.fromEntries(user.entries())  
+    const update = Object.fromEntries(user.entries());
 
-
-
- fetch(`http://localhost:4000/user/${_id}`,{
-
-
-   method: "PUT",
-  headers: {
-    "content-type": "application/json"
-  },
-  body: JSON.stringify(update)
-
- }).then(res=>res.json()).then(data=>{
-  
-  if(data.modifiedCount){
-
- Swal.fire({
+    fetch(`https://optional-task-server.vercel.app/user/${_id}`, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(update),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.modifiedCount) {
+          Swal.fire({
             title: "Coffee Updated!",
             icon: "success",
             draggable: true,
             timer: 1500,
           });
 
-          navigate('/alluser')
+          navigate("/alluser");
+        }
+        console.log("after update", data);
+      });
 
-  }
-  console.log('after update',data
-
-  );
- })  
- 
- 
- 
     // Send to backend if needed
   };
 
@@ -71,12 +61,16 @@ const Updateuser = () => {
     <div className="flex items-center justify-center w-11/12 mx-auto py-12">
       <div className="bg-white p-8 rounded-2xl shadow-lg w-full">
         <h2 className="text-2xl font-bold text-center mb-2">Update User</h2>
-        <p className="text-center text-gray-500 mb-6">Use the below form to Update account</p>
+        <p className="text-center text-gray-500 mb-6">
+          Use the below form to Update account
+        </p>
 
         <form onSubmit={handleUpdate} className="space-y-4">
           {/* Name */}
           <div>
-            <label className="flex text-sm font-medium text-gray-700 mb-1">Name</label>
+            <label className="flex text-sm font-medium text-gray-700 mb-1">
+              Name
+            </label>
             <div className="relative">
               <FaUser className="absolute top-3 left-3 text-gray-400" />
               <input
@@ -90,7 +84,9 @@ const Updateuser = () => {
 
           {/* Email */}
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1 flex">Email</label>
+            <label className="text-sm font-medium text-gray-700 mb-1 flex">
+              Email
+            </label>
             <div className="relative">
               <MdEmail className="absolute top-3 left-3 text-gray-400" />
               <input
@@ -104,7 +100,9 @@ const Updateuser = () => {
 
           {/* Gender */}
           <div>
-            <label className="flex text-sm font-medium text-gray-700 mb-1">Gender</label>
+            <label className="flex text-sm font-medium text-gray-700 mb-1">
+              Gender
+            </label>
             <div className="flex gap-6">
               <label className="flex items-center gap-2">
                 <input
@@ -133,7 +131,9 @@ const Updateuser = () => {
 
           {/* Status */}
           <div>
-            <label className="flex text-sm font-medium text-gray-700 mb-1">Status</label>
+            <label className="flex text-sm font-medium text-gray-700 mb-1">
+              Status
+            </label>
             <div className="flex gap-6">
               <label className="flex items-center gap-2">
                 <input

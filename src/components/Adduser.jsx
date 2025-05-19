@@ -1,53 +1,42 @@
-import React, { useState } from "react";
-import { MdEmail } from "react-icons/md";
+import { useState } from "react";
 import { FaUser } from "react-icons/fa";
-import Swal from "sweetalert2";
+import { MdEmail } from "react-icons/md";
 import { useNavigate } from "react-router";
+import Swal from "sweetalert2";
 
 const NewUserForm = () => {
+  const [gander, setgander] = useState("");
+  const [status, setStatus] = useState("");
+  const navigate = useNavigate();
+  const handlePost = (e) => {
+    e.preventDefault();
 
-   const [gander,setgander] = useState('')
-   const [status,setStatus] = useState('')               
-const  navigate  = useNavigate()
-    const handlePost = (e)=>{
+    const frm = e.target;
 
-        e.preventDefault()
+    const newser = new FormData(frm);
+    const users = Object.fromEntries(newser.entries());
 
-        const frm = e.target 
+    fetch("https://optional-task-server.vercel.app/user", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(users),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        Swal.fire({
+          title: "Added Successfully!",
+          icon: "success",
+          draggable: true,
+          timer: 1500,
+        });
 
-        const newser = new FormData(frm)  
-        const users = Object.fromEntries(newser.entries()) 
-
-       
-
-        fetch('http://localhost:4000/user',{
-
-        method:'POST',
-        headers:{
-
-
-            'content-type': 'application/json'
-        },
-        body:JSON.stringify(users)
-        }).then(res=>res.json()).then(data=>{
-            
-
-            Swal.fire({
-  title: "Added Successfully!",
-  icon: "success",
-  draggable: true,
-  timer: 1500
-});
-
-
-
-            console.log('after add data',data);
+        console.log("after add data", data);
         e.target.reset();
-navigate('/alluser')
-            
-        })
-        
-    }
+        navigate("/alluser");
+      });
+  };
   return (
     <div className="flex items-center justify-center w-11/12 mx-auto py-12">
       <div className="bg-white p-8 rounded-2xl shadow-lg w-full">
@@ -59,7 +48,7 @@ navigate('/alluser')
         <form onSubmit={handlePost} className="space-y-4">
           {/* Name Field */}
           <div>
-        <label className="flex text-sm font-medium text-gray-700 mb-1">
+            <label className="flex text-sm font-medium text-gray-700 mb-1">
               Name
             </label>
             <div className="relative">
@@ -81,7 +70,7 @@ navigate('/alluser')
             <div className="relative">
               <MdEmail className="absolute top-3 left-3 text-gray-400" />
               <input
-              name="email"
+                name="email"
                 type="email"
                 placeholder="jaya@gmail.com"
                 className="input input-bordered w-full pl-10"
@@ -97,13 +86,12 @@ navigate('/alluser')
             <div className="flex gap-6">
               <label className="flex items-center gap-2">
                 <input
-                 type="radio"
+                  type="radio"
                   name="gender"
                   className="radio radio-sm radio-primary"
-                   value="Male"
+                  value="Male"
                   checked={gander === "Male"}
                   onChange={(e) => setgander(e.target.value)}
-                 
                 />
                 Male
               </label>
@@ -112,9 +100,9 @@ navigate('/alluser')
                   type="radio"
                   name="gender"
                   className="radio radio-sm radio-primary"
-                 value=' Female' 
-                 checked = {gander === ' Female'} 
-                  onChange={(e)=>setgander(e.target.value)}
+                  value=" Female"
+                  checked={gander === " Female"}
+                  onChange={(e) => setgander(e.target.value)}
                 />
                 Female
               </label>
@@ -132,9 +120,9 @@ navigate('/alluser')
                   type="radio"
                   name="status"
                   className="radio radio-sm radio-success"
-                  value=' Active' 
-                  checked={status ===' Active'} 
-                  onChange={(e)=>setStatus(e.target.value)}
+                  value=" Active"
+                  checked={status === " Active"}
+                  onChange={(e) => setStatus(e.target.value)}
                 />
                 Active
               </label>
@@ -142,10 +130,10 @@ navigate('/alluser')
                 <input
                   type="radio"
                   name="status"
-                  className="radio radio-sm radio-success" 
-                    value='Inactive' 
-                  checked={status ==='Inactive'} 
-                  onChange={(e)=>setStatus(e.target.value)}
+                  className="radio radio-sm radio-success"
+                  value="Inactive"
+                  checked={status === "Inactive"}
+                  onChange={(e) => setStatus(e.target.value)}
                 />
                 Inactive
               </label>

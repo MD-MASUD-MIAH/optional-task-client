@@ -1,36 +1,39 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
-import { createBrowserRouter, RouterProvider } from 'react-router'
-import Root from './components/Root.jsx'
-import Home from './components/Home.jsx'
-import Adduser from './components/Adduser.jsx'
-import Updateuser from './components/Updateuser.jsx'
-import Alluser from './components/Alluser.jsx'
-
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { createBrowserRouter, RouterProvider } from "react-router";
+import Adduser from "./components/Adduser.jsx";
+import Alluser from "./components/Alluser.jsx";
+import Home from "./components/Home.jsx";
+import Root from "./components/Root.jsx";
+import Updateuser from "./components/Updateuser.jsx";
+import "./index.css";
 
 const router = createBrowserRouter([
+  {
+    path: "/",
+    Component: Root,
+    children: [
+      { index: true, Component: Home },
+      { path: "/adduser", Component: Adduser },
+      {
+        path: "/update/:id",
 
+        loader: ({ params }) =>
+          fetch(`https://optional-task-server.vercel.app/user/${params.id}`),
+        Component: Updateuser,
+      },
+      {
+        path: "/alluser",
 
-  {path:'/',Component:Root,children:[
+        loader: () => fetch("https://optional-task-server.vercel.app/user"),
+        Component: Alluser,
+      },
+    ],
+  },
+]);
 
-
-  {index:true , Component:Home},
-  {path:'/adduser',Component:Adduser},
-  {path:'/update/:id',
-    
-   loader:({params})=>fetch(`http://localhost:4000/user/${params.id}`),
-    Component:Updateuser},
-  {path:'/alluser',
-    
-    loader:()=>fetch('http://localhost:4000/user'),
-    Component:Alluser}
-  ]}
-])
-
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById("root")).render(
   <StrictMode>
-  <RouterProvider router={router}></RouterProvider>
-  </StrictMode>,
-)
+    <RouterProvider router={router}></RouterProvider>
+  </StrictMode>
+);
